@@ -244,8 +244,13 @@ class Job
         }
 
         $adminUser = User::where('is_admin', '=', '1')->get();
-
-        $qqwry = file_get_contents('https://qqwry.mirror.noc.one/QQWry.Dat?from=sspanel_uim');
+        $stream_opts = [
+            "ssl" => [
+                "verify_peer"=>false,
+                "verify_peer_name"=>false,
+             ]
+        ];    
+        $qqwry = file_get_contents("https://qqwry.mirror.noc.one/QQWry.Dat?from=sspanel_uim",false, stream_context_create($stream_opts));
         if ($qqwry != '') {
             rename(BASE_PATH . '/storage/qqwry.dat', BASE_PATH . '/storage/qqwry.dat.bak');
             $fp = fopen(BASE_PATH . '/storage/qqwry.dat', 'wb');
